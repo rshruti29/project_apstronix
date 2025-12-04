@@ -1,146 +1,165 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 const heroVariants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: -12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35 } },
 };
+
 const menuVariants = {
-  open: { opacity: 1, y: 0, pointerEvents: "auto", visibility: "visible" },
-  closed: { opacity: 0, y: -20, pointerEvents: "none", visibility: "hidden" },
+  open: { opacity: 1, y: 0, pointerEvents: "auto" as const },
+  closed: { opacity: 0, y: -12, pointerEvents: "none" as const },
 };
 
 const navItems = [
   { label: "ABOUT US", path: "#About" },
   { label: "CAREER", path: "/career" },
   { label: "CONTACT US", path: "/contact" },
-  { label: "COMPONENTS", path: "/components" },
+  { label: "OUR CLIENT", path: "#clients" },
+  { label: "PRODUCT", path: "/product" },
   { label: "SHOP", path: "/shop" },
 ];
 
-const Navbar: React.FC = () => {
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 768) setIsMenuOpen(false);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const handleSmoothScroll = (path: string) => {
     setIsMenuOpen(false);
     if (path.startsWith("#")) {
-      const sectionId = path.substring(1);
-      const targetSection = document.getElementById(sectionId);
-      if (targetSection) {
-        targetSection.scrollIntoView({ behavior: "smooth" });
-      }
+      const el = document.getElementById(path.substring(1));
+      el?.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
     <>
-      {/* Navbar */}
-      <div className="fixed top-0 left-0 w-full z-50 flex justify-center py-6">
+      <div className="fixed inset-x-0 top-4 z-50 flex justify-center pointer-events-none">
         <motion.nav
-          className="bg-[#b5a1e02f] w-[98%] sm:w-[95%] max-w-[1200px] backdrop-blur-sm shadow-xl h-[60px] md:h-[70px] flex justify-between items-center rounded-[34px] xs:rounded-[40px] sm:rounded-[62px] px-2 xs:px-4 md:px-8 ring-1 ring-[#ffffff75]"
           initial="hidden"
           animate="visible"
           variants={heroVariants}
+          className="
+            pointer-events-auto flex items-center justify-between
+            bg-[#b5a1e02f] backdrop-blur-md shadow-xl
+            ring-1 ring-white/40
+            rounded-[40px] px-4 md:px-8
+
+            /* --- MATCHED WIDTHS FROM SECOND NAVBAR --- */
+            w-[95%] xs:w-[94%] sm:w-[92%] md:w-[90%] lg:w-[89%] xl:w-[86%] 2xl:w-[83%]
+
+            h-[60px] md:h-[80px]
+          "
         >
-          {/* Logo / Home link (place logo at public/logo.png or update the src) */}
-          <Link href="/" className="flex items-center gap-3 hoverable text-white">
-            <img src="/Hero_Assets/Logo.png" alt="Logo" className="h-7 w-auto sm:h-8" />
-            <span className="sr-only">Home</span>
+          {/* LEFT LOGO */}
+          <Link
+            href="/"
+            className="shrink-0 flex items-center z-20"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <div className="bg-white/95 backdrop-blur-md rounded-lg px-2 py-1 shadow-sm">
+              <img
+                src="/Hero_Assests/Logo.png"
+                alt="Logo"
+                className="h-9 sm:h-10 md:h-11 lg:h-12 object-contain"
+              />
+            </div>
           </Link>
-          {/* Desktop Nav */}
-          <div className="hidden md:flex flex-1 justify-around items-center gap-4 md:gap-6 px-2 md:px-6">
+
+          {/* DESKTOP MENU */}
+          <div className="hidden md:flex flex-1 justify-center overflow-hidden">
+            <ul className="flex items-center gap-6 xl:gap-10 overflow-hidden">
+              {navItems.map((item) => (
+                <li key={item.label} className="min-w-fit">
+                  {item.path.startsWith("#") ? (
+                    <button
+                      onClick={() => handleSmoothScroll(item.path)}
+                      className="text-black text-sm lg:text-base font-light tracking-wide hover:text-purple-300 transition"
+                    >
+                      {item.label}
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.path}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="text-black text-sm lg:text-base font-light tracking-wide hover:text-purple-300 transition"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* MOBILE BUTTON */}
+          <div className="md:hidden ml-auto">
+            <button
+              onClick={() => setIsMenuOpen((prev) => !prev)}
+              aria-label="Menu"
+              className="w-10 h-10 flex flex-col justify-center items-center"
+            >
+              <span
+                className={`block w-6 h-[2px] bg-black transition-all duration-300 ${
+                  isMenuOpen ? "rotate-45 translate-y-[6px]" : "-translate-y-1.5"
+                }`}
+              />
+              <span
+                className={`block w-6 h-[2px] bg-black my-1 transition-opacity duration-300 ${
+                  isMenuOpen ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <span
+                className={`block w-6 h-[2px] bg-black transition-all duration-300 ${
+                  isMenuOpen ? "-rotate-45 -translate-y-[6px]" : "translate-y-1.5"
+                }`}
+              />
+            </button>
+          </div>
+        </motion.nav>
+      </div>
+
+      {/* MOBILE MENU */}
+      <motion.div
+        initial="closed"
+        animate={isMenuOpen ? "open" : "closed"}
+        variants={menuVariants}
+        className="md:hidden fixed top-[100px] left-0 w-full px-6 z-40"
+      >
+        <div className="bg-[#b5a1e030] backdrop-blur-xl rounded-2xl shadow-xl ring-1 ring-white/40 py-6 px-4">
+          <nav className="flex flex-col gap-4">
             {navItems.map((item) =>
               item.path.startsWith("#") ? (
-                <a
-                  key={item.path}
+                <button
+                  key={item.label}
                   onClick={() => handleSmoothScroll(item.path)}
-                  className="cursor-pointer text-sm sm:text-base md:text-lg text-[#ffffff] font-light hover:text-purple-300 transition-all duration-300 transform hover:scale-105 hoverable px-1"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                  className="text-lg text-black font-light tracking-wide"
                 >
                   {item.label}
-                </a>
+                </button>
               ) : (
                 <Link
-                  key={item.path}
+                  key={item.label}
                   href={item.path}
-                  className="text-sm sm:text-base md:text-lg text-[#ffffff] font-light hover:text-purple-300 transition-all duration-300 transform hover:scale-105 hoverable px-1"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-lg text-black font-light tracking-wide"
                 >
                   {item.label}
                 </Link>
               )
             )}
-          </div>
-          {/* Hamburger for Mobile */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1 cursor-pointer z-50 hoverable"
-            aria-label="Toggle menu"
-          >
-            <span
-              className={`block h-0.5 w-full bg-white rounded-sm transform transition duration-300 ease-in-out origin-[1px_1px] ${
-                isMenuOpen ? "rotate-45 translate-y-0.5" : "rotate-0"
-              }`}
-            />
-            <span
-              className={`block h-0.5 w-full bg-white rounded-sm transition-opacity duration-300 ease-in-out ${
-                isMenuOpen ? "opacity-0" : "opacity-100"
-              }`}
-            />
-            <span
-              className={`block h-0.5 w-full bg-white rounded-sm transform transition duration-300 ease-in-out origin-[1px_0px] ${
-                isMenuOpen ? "-rotate-45 -translate-y-0.5" : "rotate-0"
-              }`}
-            />
-          </button>
-        </motion.nav>
-      </div>
-
-      {/* Mobile Menu Dropdown */}
-      <motion.div
-        className="md:hidden fixed top-[60px] xs:top-[70px] left-0 w-full px-1 z-40"
-        initial="closed"
-        animate={isMenuOpen ? "open" : "closed"}
-        variants={menuVariants}
-        style={{
-          pointerEvents: isMenuOpen ? "auto" : "none",
-          visibility: isMenuOpen ? "visible" : "hidden",
-        }}
-      >
-        <div className="mx-auto w-full max-w-[420px] bg-[#b5a1e015] backdrop-blur-md rounded-2xl overflow-hidden ring-1 ring-[#ffffff75] flex flex-col items-center gap-4 py-6 px-2 xs:px-4">
-          {navItems.map((item) =>
-            item.path.startsWith("#") ? (
-              <a
-                key={item.path}
-                onClick={() => {
-                  toggleMenu();
-                  handleSmoothScroll(item.path);
-                }}
-                className="text-sm sm:text-base text-[#ffffff] font-light hover:text-purple-300 transition-all duration-300 transform hover:scale-105 hoverable w-full text-center cursor-pointer"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-              >
-                {item.label}
-              </a>
-            ) : (
-              <Link
-                key={item.path}
-                href={item.path}
-                onClick={toggleMenu}
-                className="text-sm sm:text-base text-[#ffffff] font-light hover:text-purple-300 transition-all duration-300 transform hover:scale-105 hoverable w-full text-center"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-              >
-                {item.label}
-              </Link>
-            )
-          )}
+          </nav>
         </div>
       </motion.div>
     </>
   );
-};
-
-export default Navbar;
+}

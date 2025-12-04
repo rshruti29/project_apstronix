@@ -6,6 +6,9 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+
+  /* GLOBAL FONT VARIABLE */
+  --font-poppins: "Poppins", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,16 +19,16 @@
   }
 }
 
-
+/* FIXED — only ONE body selector */
 body {
-  body {
   min-height: 100vh;
 
-  /* This replicates Tailwind's bg-gradient-to-br from-black via-gray-900 to-black */
+  /* Background */
   background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #000 100%);
-  color: #fff; /* Optional: ensures text is white everywhere */
-}
+  color: #fff;
 
+  /* Apply Poppins globally */
+  font-family: var(--font-poppins);
 }
 
 @layer utilities {

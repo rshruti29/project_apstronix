@@ -1,44 +1,38 @@
 "use client";
+
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { SwiperSlide } from "swiper/react";
+
 import { events } from "@/config/mainEvents/mainEvents";
 import RulebookButton from "@/components/ui/RulebookButton";
 import { SwiperCarousel } from "@/components/Carousel/Carousel";
 
-// Local font placeholders
 const neue = { className: "font-neue" };
 const spaceGrotesk = { className: "font-space-grotesk" };
 
-type EventType = typeof events[number];
+type EventType = (typeof events)[number];
 
-const EventCard = ({
-  event,
-  isActive,
-}: {
-  event: EventType;
-  isActive: boolean;
-}) => (
-  <motion.div
-    className="flex flex-col items-center"
-    whileHover={{ y: -10 }}
-    transition={{ duration: 0.3 }}
-  >
+const borderGradient =
+  "bg-[linear-gradient(155deg,rgba(240,225,200,0.9)_0%,rgba(230,210,180,0.9)_50%,rgba(245,230,210,0.9)_100%)]";
+
+const shadowWarm = "shadow-[0_10px_30px_rgba(180,150,110,0.25)]";
+
+const textDark = "text-[#5a4633]";
+const textSoft = "text-[#7a6653]";
+
+const EventCard = ({ event }: { event: EventType }) => (
+  <motion.div className="flex flex-col items-center">
     <motion.div
-      className="h-[460px] sm:h-[500px] w-full rounded-[44px] bg-[linear-gradient(155deg,rgba(125,249,255,0.5)_3.49%,rgba(98,42,227,0.5)_49.68%,rgba(125,249,255,0.5)_98.24%)] p-1"
+      className={`h-[460px] sm:h-[500px] w-full rounded-[44px] ${borderGradient} p-1 ${shadowWarm}
+      transition-all duration-300`}
       whileHover={{
-        boxShadow: "0 15px 30px rgba(125, 249, 255, 0.4)",
+        boxShadow: "0 20px 50px rgba(180,150,110,0.35)",
       }}
     >
-      <div className="relative w-full h-full rounded-[40px] overflow-hidden">
-        <Image
-          src={event.image}
-          alt={event.name}
-          fill
-          className="object-cover"
-        />
+      <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-[#fffaf3] shadow-inner">
+        <Image src={event.image} alt={event.name} fill className="object-cover" />
       </div>
     </motion.div>
   </motion.div>
@@ -63,39 +57,34 @@ const EventDetails = ({
       >
         <div className="flex-1">
           <h2
-            className={`text-white text-center ${neue.className} text-6xl font-bold uppercase mb-8 tracking-wider`}
+            className={`${textDark} text-center ${neue.className} text-6xl font-bold uppercase mb-8 tracking-wider`}
           >
             {event.name}
           </h2>
+
           {!event.description.includes("Lorem ipsum") && (
             <p
-              className={`text-white/90 text-justify ${spaceGrotesk.className} text-lg leading-relaxed`}
+              className={`${textSoft} text-justify ${spaceGrotesk.className} text-lg leading-relaxed`}
             >
               {event.description}
             </p>
           )}
+
           {!event.rulebook.includes("example.com") && (
             <Link href={event.rulebook}>
               <div className="mt-8 flex justify-center">
-                <RulebookButton size="md" variant="primary" />
+                <RulebookButton size="md" />
               </div>
             </Link>
           )}
         </div>
 
+        {/* Side image card */}
         <motion.div
-          className="flex-shrink-0 w-[350px] h-[500px] rounded-[44px] bg-[linear-gradient(155deg,rgba(125,249,255,0.5)_3.49%,rgba(98,42,227,0.5)_49.68%,rgba(125,249,255,0.5)_98.24%)] p-1"
-          whileHover={{
-            boxShadow: "0 20px 40px rgba(125, 249, 255, 0.3)",
-          }}
+          className={`flex-shrink-0 w-[350px] h-[500px] rounded-[44px] ${borderGradient} p-1 ${shadowWarm}`}
         >
-          <div className="relative w-full h-full rounded-[40px] overflow-hidden">
-            <Image
-              src={event.image}
-              alt={event.name}
-              fill
-              className="object-cover transition-transform duration-300 hover:scale-110"
-            />
+          <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-[#fffaf3] shadow-inner">
+            <Image src={event.image} alt={event.name} fill className="object-cover" />
           </div>
         </motion.div>
       </motion.div>
@@ -112,39 +101,33 @@ const EventDetails = ({
       >
         <div className="flex-1">
           <h2
-            className={`text-white text-center ${neue.className} text-4xl font-bold uppercase mb-6 tracking-wider`}
+            className={`${textDark} text-center ${neue.className} text-4xl font-bold uppercase mb-6 tracking-wider`}
           >
             {event.name}
           </h2>
+
           {!event.description.includes("Lorem ipsum") && (
             <p
-              className={`text-white/90 text-justify ${spaceGrotesk.className} text-lg leading-relaxed`}
+              className={`${textSoft} text-justify ${spaceGrotesk.className} text-lg leading-relaxed`}
             >
               {event.description}
             </p>
           )}
+
           {!event.rulebook.includes("example.com") && (
             <Link href={event.rulebook}>
-              <div className="mt-8 flex justify-center">
-                <RulebookButton size="md" variant="primary" />
+              <div className="mt-6 flex justify-center">
+                <RulebookButton size="md" />
               </div>
             </Link>
           )}
         </div>
 
         <motion.div
-          className="flex-shrink-0 w-[280px] h-[400px] rounded-[44px] bg-[linear-gradient(155deg,rgba(125,249,255,0.5)_3.49%,rgba(98,42,227,0.5)_49.68%,rgba(125,249,255,0.5)_98.24%)] p-1"
-          whileHover={{
-            boxShadow: "0 15px 30px rgba(125, 249, 255, 0.4)",
-          }}
+          className={`flex-shrink-0 w-[280px] h-[400px] rounded-[44px] ${borderGradient} p-1 shadow-lg`}
         >
-          <div className="relative w-full h-full rounded-[40px] overflow-hidden">
-            <Image
-              src={event.image}
-              alt={event.name}
-              fill
-              className="object-cover transition-transform duration-500 hover:scale-110"
-            />
+          <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-[#fffaf3] shadow-inner">
+            <Image src={event.image} alt={event.name} fill className="object-cover" />
           </div>
         </motion.div>
       </motion.div>
@@ -160,39 +143,33 @@ const EventDetails = ({
         transition={{ duration: 0.3 }}
       >
         <motion.div
-          className="w-full max-w-[240px] aspect-[3/4] rounded-2xl bg-gradient-to-br from-cyan-400/30 via-purple-600/30 to-cyan-400/30 p-[2px]"
-          whileHover={{
-            boxShadow: "0 8px 16px rgba(125, 249, 255, 0.3)",
-          }}
+          className={`w-full max-w-[240px] aspect-[3/4] rounded-2xl ${borderGradient}
+          p-[2px] shadow-md`}
         >
-          <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/20 backdrop-blur-sm">
-            <Image
-              src={event.image}
-              alt={event.name}
-              fill
-              className="object-cover"
-            />
+          <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[#fffaf3] shadow-inner">
+            <Image src={event.image} alt={event.name} fill className="object-cover" />
           </div>
         </motion.div>
 
         <div className="w-full max-w-[280px] text-center space-y-3">
           <h2
-            className={`text-white ${neue.className} text-2xl font-bold uppercase tracking-wide`}
+            className={`${textDark} ${neue.className} text-2xl font-bold uppercase tracking-wide`}
           >
             {event.name}
           </h2>
 
           {!event.description.includes("Lorem ipsum") && (
             <p
-              className={`text-white/90 text-justify ${spaceGrotesk.className} text-lg leading-relaxed`}
+              className={`${textSoft} text-justify ${spaceGrotesk.className} text-lg leading-relaxed`}
             >
               {event.description}
             </p>
           )}
+
           {!event.rulebook.includes("example.com") && (
             <Link href={event.rulebook}>
-              <div className="mt-8 flex justify-center">
-                <RulebookButton size="md" variant="primary" />
+              <div className="mt-4 flex justify-center">
+                <RulebookButton size="md" />
               </div>
             </Link>
           )}
@@ -204,51 +181,44 @@ const EventDetails = ({
 
 const FlagEvent = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const renderSlides = () =>
-    events.map((event, index) => (
-      <SwiperSlide
-        key={event.id}
-        className={`slide ${index === currentIndex ? "active-slide" : ""}`}
-      >
-        <div className="w-[350px]">
-          <EventCard event={event} isActive={index === currentIndex} />
+    events.map((event) => (
+      <Link key={event.id} href={`/products/${event.id}`}>
+        <div className="w-[350px] cursor-pointer">
+          <EventCard event={event} />
         </div>
-      </SwiperSlide>
+      </Link>
     ));
 
   return (
-    <div className="bg-gradient-to-br from-black via-gray-900 to-black min-h-screen">
-      {/* Hero Section */}
+    <div className="min-h-screen bg-[#FBF4ED]">
       <div className="relative overflow-hidden">
-        {/* Title */}
         <motion.div
-          className="my-16 flex justify-center items-center relative z-10"
+          className="my-16 flex justify-center items-center z-10"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8 }}
         >
           <motion.h1
-            className={`text-white px-5 ${neue.className} font-semibold text-center uppercase text-[28px] sm:text-[35px] md:text-[80px] leading-normal`}
-           
+            className={`${textDark} px-5 ${neue.className} font-semibold text-center uppercase text-[28px] sm:text-[35px] md:text-[80px]`}
           >
-            FEATURED COMPONENTS
+            PRODUCTS
           </motion.h1>
         </motion.div>
 
-        {/* Carousel */}
         <div className="relative px-4 mb-10 lg:mb-20 z-10">
           <SwiperCarousel
             mapFunction={renderSlides}
             desktopViewClassname="mySwiper"
             mobileViewClassName="mySwiper2"
             onIndexChange={setCurrentIndex}
-            isEventSection={true}
+            isEventSection
           />
         </div>
       </div>
 
-      {/* Event Details */}
-      <div className="relative overflow-visible pt-2 pb-24">
+      <div className="pt-2 pb-24 relative">
         <EventDetails event={events[currentIndex]} currentIndex={currentIndex} />
       </div>
     </div>

@@ -1,17 +1,23 @@
-'use client';
-import React from 'react';
-import { useState, useEffect, useRef } from 'react';
-import { useAnimate } from 'framer-motion';
-import { Swiper } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
-import type { Swiper as SwiperType } from 'swiper';
-import type { SwiperRef } from 'swiper/react';
-import { ScreenViewContainer, SliderContainer, Wrapper } from './Carousel.styles';
-import { LeftArrowButton, RightArrowButton } from './ArrowButton';
-import './swiper.css';
+"use client";
+
+import React, { useState, useEffect, useRef } from "react";
+import { useAnimate } from "framer-motion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
+import type { SwiperRef } from "swiper/react";
+
+import {
+  ScreenViewContainer,
+  SliderContainer,
+  Wrapper,
+} from "./Carousel.styles";
+import { LeftArrowButton, RightArrowButton } from "./ArrowButton";
+
+import "./swiper.css";
+
 interface SwiperCarouselProps {
-  // Accept either a render function (used by callers like Featuredcomp) or pre-built nodes.
-  mapFunction: React.ReactNode | (() => React.ReactNode);
+  mapFunction: (() => React.ReactNode[]) | React.ReactNode[];
   mobileViewClassName?: string;
   desktopViewClassname?: string;
   onIndexChange?: (index: number) => void;
@@ -23,50 +29,56 @@ export const SwiperCarousel: React.FC<SwiperCarouselProps> = ({
   mobileViewClassName,
   desktopViewClassname,
   onIndexChange,
-  isEventSection,
 }) => {
   const [scope, animate] = useAnimate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const swiperRef = useRef<SwiperRef | null>(null);
+
   const slideWidth = 456.74;
 
   useEffect(() => {
-    const updateScreenSize = () => setIsMobile(window.innerWidth < 900);
-    updateScreenSize();
-    window.addEventListener('resize', updateScreenSize);
-    return () => window.removeEventListener('resize', updateScreenSize);
+    const updateSize = () => setIsMobile(window.innerWidth < 900);
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
   }, []);
 
   const handleNext = () => swiperRef.current?.swiper?.slideNext();
   const handlePrev = () => swiperRef.current?.swiper?.slidePrev();
 
   const onSlideChange = (swiper: SwiperType) => {
-    const newIndex = swiper.realIndex;
-    setCurrentIndex(newIndex);
-    if (onIndexChange) {
-      onIndexChange(newIndex);
-    }
+    setCurrentIndex(swiper.realIndex);
+    if (onIndexChange) onIndexChange(swiper.realIndex);
   };
 
   useEffect(() => {
-    if (scope.current) {
-      const xOffset = -currentIndex * slideWidth;
-      animate(
-        scope.current,
-        { x: xOffset },
-        { duration: 7, ease: [0.42, 0, 0.58, 1], type: 'tween' },
-      );
-    }
+    if (!scope.current) return;
+    const xOffset = -currentIndex * slideWidth;
+
+    animate(
+      scope.current,
+      { x: xOffset },
+      { duration: 7, ease: [0.42, 0, 0.58, 1], type: "tween" }
+    );
   }, [currentIndex, animate, scope]);
+
+  const slides =
+    typeof mapFunction === "function"
+      ? mapFunction()
+      : (mapFunction as React.ReactNode[]);
 
   return (
     <Wrapper>
       <ScreenViewContainer>
-        <div style={{ position: 'absolute', left: '10px', top: '50%', zIndex: 10 }}>
+        {/* Left Arrow */}
+        <div
+          style={{ position: "absolute", left: "10px", top: "50%", zIndex: 10 }}
+        >
           <LeftArrowButton onClick={handlePrev} />
         </div>
-        <SliderContainer>
+
+        <SliderContainer ref={scope}>
           <Swiper
             ref={swiperRef}
             slidesPerView={isMobile ? 1 : 3}
@@ -74,14 +86,24 @@ export const SwiperCarousel: React.FC<SwiperCarouselProps> = ({
             loop
             spaceBetween={isMobile ? 30 : 0}
             onSlideChange={onSlideChange}
-            modules={[Pagination, Autoplay]}
-            autoplay={{ delay: isEventSection ? 3000 : 15000, disableOnInteraction: false }}
+            modules={[Pagination]}
             className={isMobile ? mobileViewClassName : desktopViewClassname}
           >
-            {typeof mapFunction === 'function' ? mapFunction() : mapFunction}
+            {slides.map((slide, index) => (
+              <SwiperSlide key={index}>{slide}</SwiperSlide>
+            ))}
           </Swiper>
         </SliderContainer>
-        <div style={{ position: 'absolute', right: '10px', top: '50%', zIndex: 10 }}>
+
+        {/* Right Arrow */}
+        <div
+          style={{
+            position: "absolute",
+            right: "10px",
+            top: "50%",
+            zIndex: 10,
+          }}
+        >
           <RightArrowButton onClick={handleNext} />
         </div>
       </ScreenViewContainer>
