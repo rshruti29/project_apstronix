@@ -1,6 +1,7 @@
 "use client";
 import React, { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
+import Footer from "@/components/Footer";
 
 export default function Careers() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -32,6 +33,8 @@ export default function Careers() {
   };
 
   return (
+    <main>
+      
     <div className="flex-grow py-10 px-2 sm:py-12 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-4xl h-120 sm:h-[550px] lg:h-[700px] mx-auto">
         <h1 className="pt-12 sm:pt-16 text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8 transition-all duration-500 hover:text-blue-600 hover:scale-110 text-gray-900">
@@ -89,8 +92,11 @@ export default function Careers() {
               {submitting ? "Submitting..." : "Submit Application"}
             </button>
           </form>
+          
         </div>
       </div>
     </div>
+    <Footer/>
+    </main>
   );
 }

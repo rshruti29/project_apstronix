@@ -1,23 +1,19 @@
 export const Wrapper = ({ children, className = "" }) => (
-  <div className={`w-full h-auto flex flex-col ${className}`}>
+  <div className={`w-full flex flex-col items-center ${className}`}>
     {children}
   </div>
 );
 
 export const ScreenViewContainer = ({ children, className = "" }) => (
-  <div className={`relative flex justify-center items-center h-auto ${className}`}>
+  <div
+    className={`relative w-full flex flex-col md:flex-row items-center justify-center ${className}`}
+  >
     {children}
   </div>
 );
 
 export const SliderContainer = ({ children, className = "" }) => (
-  <div className={`overflow-x-hidden h-auto relative ${className}`}>
-    {children}
-  </div>
-);
-
-export const SwiperContainer = ({ children, className = "" }) => (
-  <div className={`flex flex-col gap-10 ${className}`}>
+  <div className={`w-full overflow-hidden mt-3 md:mt-0 ${className}`}>
     {children}
   </div>
 );

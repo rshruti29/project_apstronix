@@ -18,7 +18,10 @@ const navItems = [
   { label: "CAREER", path: "/career" },
   { label: "CONTACT US", path: "/contact" },
   { label: "OUR CLIENT", path: "#clients" },
-  { label: "PRODUCT", path: "/product" },
+
+  // FIXED — changed from "/product" to "#products"
+  { label: "PRODUCT", path: "#products" },
+
   { label: "SHOP", path: "/shop" },
 ];
 
@@ -43,7 +46,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="fixed inset-x-0 top-4 z-50 flex justify-center pointer-events-none">
+      <div className="absolute inset-x-0 top-0.5 z-50 flex justify-center pointer-events-none">
         <motion.nav
           initial="hidden"
           animate="visible"
@@ -136,7 +139,7 @@ export default function Navbar() {
         className="md:hidden fixed top-[100px] left-0 w-full px-6 z-40"
       >
         <div className="bg-[#b5a1e030] backdrop-blur-xl rounded-2xl shadow-xl ring-1 ring-white/40 py-6 px-4">
-          <nav className="flex flex-col gap-4">
+          <nav className="flex flex-col gap-4 items-center text-center">
             {navItems.map((item) =>
               item.path.startsWith("#") ? (
                 <button

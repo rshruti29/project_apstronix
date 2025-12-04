@@ -5,8 +5,8 @@ function Footer() {
   const currentYear = new Date().getFullYear();
 
   const logos = [
+     { file: "NITR.png", alt: "NIT Rourkela" },
     { file: "FTBI.png", alt: "FTBI" },
-    { file: "NITR.png", alt: "NIT Rourkela" },
     { file: "STARTUP INDIA.png", alt: "Startup India" },
     { file: "DST NIDHI.png", alt: "DST NIDHI" },
     { file: "MEITY.png", alt: "MeitY" },
@@ -14,7 +14,7 @@ function Footer() {
   ];
 
   return (
-    <footer className="w-full bg-[#102E50] text-gray-200">
+    <footer className="w-full bg-[#102e50] text-gray-200">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-14">
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mb-12">

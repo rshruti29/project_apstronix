@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
+import Footer from "@/components/Footer";
 
 function Page() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+    <main>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 ">
       <h1 className="text-gray-900 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-wide text-center font-[Poppins]">
         {"COMING SOON...".split("").map((char, index) => (
           <span
@@ -34,7 +36,41 @@ function Page() {
         }
       `}</style>
     </div>
+    <Footer/>
+    </main>
   );
 }
 
 export default Page;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,14 +8,17 @@ import ClientsCarousel from "@/components/Carousel/ClientsCarousel";
 
 export default function Home() {
   return (
-    <main >
-    <Hero/>
-    <About/>
-      <section id="clients">
-        <ClientsCarousel />
+    <main>
+      <Hero />
+      <About />
+      <ClientsCarousel />
+
+      {/* ✅ Add this wrapper so navbar can scroll here */}
+      <section id="products">
+        <Featuredcomp />
       </section>
-    <Featuredcomp/>
-   <Footer/>
+
+      <Footer />
     </main>
   );
 }

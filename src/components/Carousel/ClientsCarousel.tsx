@@ -18,11 +18,12 @@ const clients = [
   { name: "IIT JODHPUR", logo: "/clients/IIT JODHPUR.png" },
   { name: "Ewarn System Pvt Ltd", logo: "/clients/EWARN.png" },
   { name: "lota Design & Innovation Pvt Ltd", logo: "/clients/LOTA.png" },
+   { name: "Publiconn Digital Private", logo: "/clients/publicon.png" },
 ];
 
 export default function ClientsCarousel() {
   return (
-    <div id="clients" className="w-full bg-white/70 pt-10 pb-1">
+    <div id="clients" className="w-full bg-[#fbf4ed] pt-10 pb-1">
 
       {/* Heading */}
       <h2 className="text-center text-black text-5xl font-bold pt-5 mb-12">
